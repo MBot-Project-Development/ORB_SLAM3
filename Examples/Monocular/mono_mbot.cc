@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 {
     if(argc < 3 || argc > 4)
     {
-        cerr << endl << "Usage: ./mono_rpicam path_to_vocabulary path_to_settings (trajectory_file_name)" << endl;
+        cerr << endl << "Usage: ./mono_mbot path_to_vocabulary path_to_settings (trajectory_file_name)" << endl;
         return 1;
     }
 
@@ -82,9 +82,9 @@ int main(int argc, char **argv)
     b_continue_session = true;
 
     cv::VideoCapture cap;
-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR, true);
+    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR, false); //true);
     try{
-        init_camera(cap, 0, 640, 480, 60);
+        init_camera(cap, 0, 640, 480, 10);
         if(!cap.isOpened()){
             std::cerr << "Error opening the video capture." << std::endl;
             cap.release();
