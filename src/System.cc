@@ -464,10 +464,10 @@ Sophus::SE3f System::TrackMonocular(const cv::Mat &im, const double &timestamp, 
             mpTracker->GrabImuData(vImuMeas[i_imu]);
 
     Sophus::SE3f Tcw = mpTracker->GrabImageMonocular(imToFeed,timestamp,filename);
-    cout << "[System L467] Done grabbing image\n";
+    // cout << "[System L467] Done grabbing image\n";
     unique_lock<mutex> lock2(mMutexState);
     mTrackingState = mpTracker->mState;
-    cout << "[System L470] mTrackingState = " << mTrackingState << endl;
+    cout << "[System L470] Tracking State is " << mTrackingState << endl;
     /*
     // Tracking states
         enum eTrackingState{
