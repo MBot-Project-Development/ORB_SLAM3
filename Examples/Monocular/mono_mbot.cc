@@ -57,6 +57,9 @@ void exit_loop_handler(int s){
 
 int main(int argc, char **argv)
 {
+    int width_img = 1280; 
+    int height_img = 720;
+    int frameCount = 0;
     if(argc < 3 || argc > 4)
     {
         cerr << endl << "Usage: ./mono_mbot path_to_vocabulary path_to_settings (trajectory_file_name)" << endl;
@@ -82,9 +85,9 @@ int main(int argc, char **argv)
     b_continue_session = true;
 
     cv::VideoCapture cap;
-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR, false); //true);
+    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR, false);
     try{
-        init_camera(cap, 0, 640, 480, 10);
+        init_camera(cap, 0, width_img, height_img, 10);
         if(!cap.isOpened()){
             std::cerr << "Error opening the video capture." << std::endl;
             cap.release();
@@ -103,15 +106,22 @@ int main(int argc, char **argv)
 
         cv::Mat imCV;
 
-        int width_img = 640; 
-        int height_img = 480;
 
         double t_resize = 0.f;
         double t_track = 0.f;
 
         while(b_continue_session)
         {
-            cap >> imCV;
+            cap >> imCV; //Type '16' -> 8UC3 (RGB)
+            // cout << "Type: " << imCV.type();
+            // if(imCV.type() != CV_16U){
+            //     std::cerr << "Input image type mismatch\n";
+            //     break;
+            // }
+            // imCV.convertTo(imCV, CV_8U);
+            cv::cvtColor(imCV, imCV, cv::COLOR_BGR2GRAY); //Type '0' -> GRAYSCALE
+            // cout << "Type: " << imCV.type();
+            cout << "Frame: " << frameCount++ << endl;
             auto time = std::chrono::system_clock::now();
             auto durationSinceEpoch = time.time_since_epoch();
             double timestamp_ms = std::chrono::duration_cast<std::chrono::milliseconds>(durationSinceEpoch).count();
@@ -153,7 +163,6 @@ int main(int argc, char **argv)
 
             // Pass the image to the SLAM system
             SLAM.TrackMonocular(imCV, timestamp_ms);
-
 #ifdef REGISTER_TIMES
 #ifdef COMPILEDWITHC11
             std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();

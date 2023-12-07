@@ -1610,6 +1610,7 @@ Sophus::SE3f Tracking::GrabImageMonocular(const cv::Mat &im, const double &times
 
     lastID = mCurrentFrame.mnId;
     Track();
+    cout << "[Tracking L1613] Finished Track() \n";
 
     return mCurrentFrame.GetPose();
 }
@@ -1904,6 +1905,7 @@ void Tracking::Track()
         }
         else
         {
+            cout << "[Tracking L1908] Starting Mono Init\n";
             MonocularInitialization();
         }
 
@@ -2474,7 +2476,7 @@ void Tracking::MonocularInitialization()
             }
 
             mbReadyToInitializate = true;
-
+            cout << "[Tracking L2479] Ready to initialize\n";
             return;
         }
     }
@@ -2483,7 +2485,7 @@ void Tracking::MonocularInitialization()
         if (((int)mCurrentFrame.mvKeys.size()<=100)||((mSensor == System::IMU_MONOCULAR)&&(mLastFrame.mTimeStamp-mInitialFrame.mTimeStamp>1.0)))
         {
             mbReadyToInitializate = false;
-
+            cout << "[Tracking L2488] Not ready to initialize: mvKeys " + to_string((int)mCurrentFrame.mvKeys.size())+ ", timestamp diff " + to_string(mLastFrame.mTimeStamp-mInitialFrame.mTimeStamp)+ "\n";
             return;
         }
 

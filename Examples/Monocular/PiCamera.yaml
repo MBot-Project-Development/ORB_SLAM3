@@ -25,16 +25,19 @@ Camera1.fy: 1327.9037823
 Camera1.cx: 637.8216578
 Camera1.cy: 227.7718987
 
-Camera1.k1: 0.1349288241
-Camera1.k2: 0.4112065228
-Camera1.p1: -0.0025423214
-Camera1.p2: 0.2344875508
+Camera1.k1: 0.0
+#0.1349288241
+Camera1.k2: 0.0
+#0.4112065228
+Camera1.p1: 0.0
+#-0.0025423214
+Camera1.p2: 0.0
+#0.2344875508
 
-Camera.width: 640
-Camera.height: 480
-
-Camera.newWidth: 640
-Camera.newHeight: 480
+Camera.width: 1280
+Camera.height: 720
+Camera.newWidth: 1280
+Camera.newHeight: 720
 
 # Camera frames per second 
 Camera.fps: 10
@@ -47,7 +50,7 @@ Camera.RGB: 1
 #--------------------------------------------------------------------------------------------
 
 # ORB Extractor: Number of features per image
-ORBextractor.nFeatures: 200
+ORBextractor.nFeatures: 1000
 #1000
 
 # ORB Extractor: Scale factor between levels in the scale pyramid 	
@@ -60,8 +63,8 @@ ORBextractor.nLevels: 8
 # Image is divided in a grid. At each cell FAST are extracted imposing a minimum response.
 # Firstly we impose iniThFAST. If no corners are detected we impose a lower value minThFAST
 # You can lower these values if your images have low contrast			
-ORBextractor.iniThFAST: 20
-ORBextractor.minThFAST: 7
+ORBextractor.iniThFAST: 15
+ORBextractor.minThFAST: 5
 
 #--------------------------------------------------------------------------------------------
 # Viewer Parameters
@@ -73,7 +76,7 @@ Viewer.PointSize: 2.0
 Viewer.CameraSize: 0.08
 Viewer.CameraLineWidth: 3.0
 Viewer.ViewpointX: 0.0
-Viewer.ViewpointY: -0.7
-Viewer.ViewpointZ: -1.8
+Viewer.ViewpointY: 0.0
+Viewer.ViewpointZ: 0.1
 Viewer.ViewpointF: 500.0
 

@@ -178,6 +178,9 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
     }
 
 
+    // Fix verbosity
+    Verbose::SetTh(Verbose::VERBOSITY_DEBUG);
+    // Verbose::PrintMess("guh", Verbose::VERBOSITY_NORMAL);
     if (mSensor==IMU_STEREO || mSensor==IMU_MONOCULAR || mSensor==IMU_RGBD)
         mpAtlas->SetInertialSensor();
 
@@ -236,8 +239,6 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
         mpViewer->both = mpFrameDrawer->both;
     }
 
-    // Fix verbosity
-    Verbose::SetTh(Verbose::VERBOSITY_QUIET);
 
 }
 
@@ -464,7 +465,7 @@ Sophus::SE3f System::TrackMonocular(const cv::Mat &im, const double &timestamp, 
             mpTracker->GrabImuData(vImuMeas[i_imu]);
 
     Sophus::SE3f Tcw = mpTracker->GrabImageMonocular(imToFeed,timestamp,filename);
-
+    cout << "[System L467] Done grabbing image\n";
     unique_lock<mutex> lock2(mMutexState);
     mTrackingState = mpTracker->mState;
     mTrackedMapPoints = mpTracker->mCurrentFrame.mvpMapPoints;
