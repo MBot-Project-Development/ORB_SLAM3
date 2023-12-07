@@ -1610,7 +1610,7 @@ Sophus::SE3f Tracking::GrabImageMonocular(const cv::Mat &im, const double &times
 
     lastID = mCurrentFrame.mnId;
     Track();
-    cout << "[Tracking L1613] Finished Track() \n";
+    // cout << "[Tracking L1613] Finished Track() \n";
 
     return mCurrentFrame.GetPose();
 }

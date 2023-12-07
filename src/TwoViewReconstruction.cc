@@ -182,7 +182,7 @@ namespace ORB_SLAM3
     void TwoViewReconstruction::FindFundamental(vector<bool> &vbMatchesInliers, float &score, Eigen::Matrix3f &F21)
     {
         // Number of putative matches
-        const int N = mvMatches12.size();
+        const int N = mvMatches12.size(); // Changed according to https://github.com/UZ-SLAMLab/ORB_SLAM3/pull/790 (originally would have empty vector -> N = 0)
 
         // Normalize coordinates
         vector<cv::Point2f> vPn1, vPn2;

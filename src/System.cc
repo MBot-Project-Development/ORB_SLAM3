@@ -467,7 +467,33 @@ Sophus::SE3f System::TrackMonocular(const cv::Mat &im, const double &timestamp, 
     // cout << "[System L467] Done grabbing image\n";
     unique_lock<mutex> lock2(mMutexState);
     mTrackingState = mpTracker->mState;
-    cout << "[System L470] Tracking State is " << mTrackingState << endl;
+    cout << "Tracking State is ";
+    switch(mTrackingState){
+        case SYSTEM_NOT_READY:
+            cout << "-1, SYSTEM_NOT_READY" << endl;
+            break;
+        case NO_IMAGES_YET:
+            cout << "0, NO_IMAGES_YET" << endl;
+            break;
+        case NOT_INITIALIZED:
+            cout << "1, NOT_INITIALIZED" << endl;
+            break;
+        case OK:
+            cout << "2, OK" << endl;
+            break;
+        case RECENTLY_LOST:
+            cout << "3, RECENTLY_LOST" << endl;
+            break;
+        case LOST:
+            cout << "4, LOST" << endl;
+            break;
+        case OK_KLT:
+            cout << "5, OK_KLT" << endl;
+            break;
+        default:
+            cout << mTrackingState <<  ", UNKNOWN" << endl;
+            break;
+    }
     /*
     // Tracking states
         enum eTrackingState{

@@ -33,11 +33,20 @@
 
 using namespace std;
 
+// Tunable parameters
+//Also set width, height, framerate in PiCamera.yaml
+int width_img = 720;
+int height_img = 480;
+int framerate = 30;
+bool enable_UI = true;
+int minExposurens = 100000;
+int maxExposurens = 2000000;
+
 
 void init_camera(cv::VideoCapture& video, int sensor_id, int width, int height, int framerate){
     std::string camera_str = "nvarguscamerasrc sensor_id=";
     camera_str += std::to_string(sensor_id);
-    camera_str += " exposuretimerange=\"100000 2000000\" ! video/x-raw(memory:NVMM), width=";
+    camera_str += " exposuretimerange=\"" + minExposurens + " " + maxExposurens + "\" ! video/x-raw(memory:NVMM), width=";
     camera_str += std::to_string(width);
     camera_str += ", height=";
     camera_str += std::to_string(height);
@@ -57,8 +66,7 @@ void exit_loop_handler(int s){
 
 int main(int argc, char **argv)
 {
-    int width_img = 720; 
-    int height_img = 480;
+    
     int frameCount = 0;
     if(argc < 3 || argc > 4)
     {
@@ -85,9 +93,9 @@ int main(int argc, char **argv)
     b_continue_session = true;
 
     cv::VideoCapture cap;
-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR, true);
+    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR, enable_UI);
     try{
-        init_camera(cap, 0, width_img, height_img, 30);
+        init_camera(cap, 0, width_img, height_img, framerate);
         if(!cap.isOpened()){
             std::cerr << "Error opening the video capture." << std::endl;
             cap.release();
@@ -95,26 +103,18 @@ int main(int argc, char **argv)
         }
 
         cout.precision(17);
-
-        /*cout << "Start processing sequence ..." << endl;
-        cout << "Images in the sequence: " << nImages << endl;
-        cout << "IMU data in the sequence: " << nImu << endl << endl;*/
-
-        // Create SLAM system. It initializes all system threads and gets ready to process frames.
         
         float imageScale = SLAM.GetImageScale();
 
         cv::Mat imCV;
-
 
         double t_resize = 0.f;
         double t_track = 0.f;
 
         while(b_continue_session)
         {
-            cap >> imCV; //Type '16' -> 8UC3 (RGB)
-            cv::cvtColor(imCV, imCV, cv::COLOR_BGR2GRAY); //Type '0' -> GRAYSCALE
-            // cv::imshow("Current camera feed", imCV);
+            cap >> imCV; 
+            cv::cvtColor(imCV, imCV, cv::COLOR_BGR2GRAY);
             cout << "Frame: " << frameCount++ << endl;
             auto time = std::chrono::system_clock::now();
             auto durationSinceEpoch = time.time_since_epoch();
@@ -171,13 +171,10 @@ int main(int argc, char **argv)
     }catch(const std::exception& ex){
         std::cout << "Error caught, exiting: " << ex.what() << "\n";
         cap.release();
-        // cv::destroyAllWindows();
         SLAM.Shutdown();
-        return 1;
+        return -1;
     }
     cap.release();
-    // cv::destroyAllWindows();
     SLAM.Shutdown();
-
     return 0;
 }

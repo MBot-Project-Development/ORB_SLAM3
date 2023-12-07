@@ -25,19 +25,13 @@ Camera1.fy: 1327.9037823
 Camera1.cx: 637.8216578
 Camera1.cy: 227.7718987
 
-Camera1.k1: 0.0
-#0.1349288241
-Camera1.k2: 0.0
-#0.4112065228
-Camera1.p1: 0.0
-#-0.0025423214
-Camera1.p2: 0.0
-#0.2344875508
+Camera1.k1: 0.1349288241
+Camera1.k2: 0.4112065228
+Camera1.p1: -0.0025423214
+Camera1.p2: 0.2344875508
 
 Camera.width: 720
 Camera.height: 480
-Camera.newWidth: 720
-Camera.newHeight: 480
 
 # Camera frames per second 
 Camera.fps: 30
