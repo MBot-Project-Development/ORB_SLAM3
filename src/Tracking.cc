@@ -2491,11 +2491,13 @@ void Tracking::MonocularInitialization()
 
         // Find correspondences
         ORBmatcher matcher(0.9,true);
+        cout << "[Tracking L2494] currentFrame keys: " + to_string(mCurrentFrame.mvKeys.size()) + ", initialFrame keys: " + to_string(mInitialFrame.mvKeys.size()) + "\n";
         int nmatches = matcher.SearchForInitialization(mInitialFrame,mCurrentFrame,mvbPrevMatched,mvIniMatches,100);
 
         // Check if there are enough correspondences
         if(nmatches<100)
         {
+            cout << "[Tracking L2488] Not ready to initialize: nmatches " + to_string(nmatches) +
             mbReadyToInitializate = false;
             return;
         }
@@ -2517,6 +2519,8 @@ void Tracking::MonocularInitialization()
             // Set Frame Poses
             mInitialFrame.SetPose(Sophus::SE3f());
             mCurrentFrame.SetPose(Tcw);
+
+            cout << "[Tracking L2522] Got pose, creating initial map\n";
 
             CreateInitialMapMonocular();
         }
