@@ -1,5 +1,11 @@
 # ORB-SLAM3
 
+This repo is forked from the [ORBSLAM3 repo](https://github.com/UZ-SLAMLab/ORB_SLAM3) developed by the UZ SLAMLab, with modifications to make sure it runs on a Monocular setup.
+
+Check out the Project Log and Directions file (`Project_log_and_directions.md`)!
+
+Below is the original README.md snippet from the ORBSLAM3 repository.
+
 ### V1.0, December 22th, 2021
 **Authors:** Carlos Campos, Richard Elvira, Juan J. Gómez Rodríguez, [José M. M. Montiel](http://webdiis.unizar.es/~josemari/), [Juan D. Tardos](http://webdiis.unizar.es/~jdtardos/).
 
