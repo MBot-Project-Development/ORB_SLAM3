@@ -108,7 +108,7 @@ namespace ORB_SLAM3
         // Wait until both threads have finished
         threadH.join();
         threadF.join();
-
+        // cout << "[TVR] SH, SF: " << SH << ", " << SF << endl;
         // Compute ratio of scores
         if(SH+SF == 0.f) return false;
         float RH = SH/(SH+SF);
@@ -118,12 +118,12 @@ namespace ORB_SLAM3
         // Try to reconstruct from homography or fundamental depending on the ratio (0.40-0.45)
         if(RH>0.50) // if(RH>0.40)
         {
-            //cout << "Initialization from Homography" << endl;
+            // cout << "[TVR] Initialization from Homography" << endl;
             return ReconstructH(vbMatchesInliersH,H, mK,T21,vP3D,vbTriangulated,minParallax,50);
         }
         else //if(pF_HF>0.6)
         {
-            //cout << "Initialization from Fundamental" << endl;
+            // cout << "[TVR] Initialization from Fundamental" << endl;
             return ReconstructF(vbMatchesInliersF,F,mK,T21,vP3D,vbTriangulated,minParallax,50);
         }
     }
@@ -182,7 +182,7 @@ namespace ORB_SLAM3
     void TwoViewReconstruction::FindFundamental(vector<bool> &vbMatchesInliers, float &score, Eigen::Matrix3f &F21)
     {
         // Number of putative matches
-        const int N = vbMatchesInliers.size();
+        const int N = mvMatches12.size(); // Changed according to https://github.com/UZ-SLAMLab/ORB_SLAM3/pull/790 (originally would have empty vector -> N = 0)
 
         // Normalize coordinates
         vector<cv::Point2f> vPn1, vPn2;

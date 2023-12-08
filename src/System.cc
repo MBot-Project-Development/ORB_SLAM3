@@ -178,6 +178,8 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
     }
 
 
+    // Fix verbosity
+    Verbose::SetTh(Verbose::VERBOSITY_DEBUG);
     if (mSensor==IMU_STEREO || mSensor==IMU_MONOCULAR || mSensor==IMU_RGBD)
         mpAtlas->SetInertialSensor();
 
@@ -236,8 +238,6 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
         mpViewer->both = mpFrameDrawer->both;
     }
 
-    // Fix verbosity
-    Verbose::SetTh(Verbose::VERBOSITY_QUIET);
 
 }
 
@@ -464,9 +464,48 @@ Sophus::SE3f System::TrackMonocular(const cv::Mat &im, const double &timestamp, 
             mpTracker->GrabImuData(vImuMeas[i_imu]);
 
     Sophus::SE3f Tcw = mpTracker->GrabImageMonocular(imToFeed,timestamp,filename);
-
+    // cout << "[System L467] Done grabbing image\n";
     unique_lock<mutex> lock2(mMutexState);
     mTrackingState = mpTracker->mState;
+    cout << "Tracking State is ";
+    switch(mTrackingState){
+        case SYSTEM_NOT_READY:
+            cout << "-1, SYSTEM_NOT_READY" << endl;
+            break;
+        case NO_IMAGES_YET:
+            cout << "0, NO_IMAGES_YET" << endl;
+            break;
+        case NOT_INITIALIZED:
+            cout << "1, NOT_INITIALIZED" << endl;
+            break;
+        case OK:
+            cout << "2, OK" << endl;
+            break;
+        case RECENTLY_LOST:
+            cout << "3, RECENTLY_LOST" << endl;
+            break;
+        case LOST:
+            cout << "4, LOST" << endl;
+            break;
+        case OK_KLT:
+            cout << "5, OK_KLT" << endl;
+            break;
+        default:
+            cout << mTrackingState <<  ", UNKNOWN" << endl;
+            break;
+    }
+    /*
+    // Tracking states
+        enum eTrackingState{
+            SYSTEM_NOT_READY=-1,
+            NO_IMAGES_YET=0,
+            NOT_INITIALIZED=1,
+            OK=2,
+            RECENTLY_LOST=3,
+            LOST=4,
+            OK_KLT=5
+        };
+    */
     mTrackedMapPoints = mpTracker->mCurrentFrame.mvpMapPoints;
     mTrackedKeyPointsUn = mpTracker->mCurrentFrame.mvKeysUn;
 
